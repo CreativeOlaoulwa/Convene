@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Check-In - {{ event.title }}{% endblock %}
+{% block content %}
+<h1>Check-In: {{ event.title }}</h1>
+<p>{{ registrations.count }} registered</p>
+
+{% for reg in registrations %}
+    <div>
+        <p>{{ reg.attendee.username }} &mdash;
+        {% if reg.checked_in %}
+            <strong>Checked In</strong>
+        {% else %}
+            Not checked in
+            <form method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="registration_id" value="{{ reg.pk }}">
+                <button type="submit">Check In</button>
+            </form>
+        {% endif %}
+        </p>
+    </div>
+{% empty %}
+    <p>No registrations yet.</p>
+{% endfor %}
+{% endblock %}

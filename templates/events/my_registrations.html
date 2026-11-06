@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}My Registrations - Convene{% endblock %}
+{% block content %}
+<h1>My Registrations</h1>
+{% for reg in registrations %}
+    <div>
+        <h3>{{ reg.event.title }}</h3>
+        <p>Registered: {{ reg.registered_at }}</p>
+        <p>Status: {% if reg.checked_in %}Checked In{% else %}Not checked in yet{% endif %}</p>
+        <form method="POST" action="{% url 'cancel_registration' reg.pk %}">
+            {% csrf_token %}
+            <button type="submit">Cancel Registration</button>
+        </form>
+    </div>
+{% empty %}
+    <p>You haven't registered for anything yet.</p>
+{% endfor %}
+{% endblock %}
