@@ -7,5 +7,5 @@ urlpatterns = [
     path('events/<int:pk>/register/', views.register_for_event, name='register_for_event'),
     path('my-registrations/', views.my_registrations, name='my_registrations'),
     path('registrations/<int:pk>/cancel/', views.cancel_registration, name='cancel_registration'),
-    path('events<int:pk>/checkin/', views.event_checkin, name='event_checkin'),
+    path('events/<int:pk>/checkin/', views.event_checkin, name='event_checkin'),
 ]

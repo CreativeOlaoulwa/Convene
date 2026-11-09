@@ -12,7 +12,11 @@
         <a href="{% url 'event_list' %}">Convene</a>
         {% if user.is_authenticated %}
         <a href="{% url 'my_registrations' %}">My Registrations</a>
-        <a href="{% url 'logout' %}">Log Out ({{ user.username }})</a>
+                <form method="POST" action="{% url 'logout' %}" class="nav-logout">
+            {% csrf_token %}
+            <button type="submit">Log Out ({{ user.username }})</button>
+        </form>
+
     {% else %}
         <a href="{% url 'login' %}">Log In</a>
         <a href="{% url 'register' %}">Register</a>

@@ -56,3 +56,13 @@ footer {
     color: #5B6472;
     margin-top: 3rem;
 }
+
+.nav-logout button {
+    background: none;
+    padding: 0;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 500;
+}
+
+.nav-logout button:hover { color: #C9A227; background: none; }
