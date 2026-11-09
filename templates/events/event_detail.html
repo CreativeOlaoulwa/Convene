@@ -3,30 +3,45 @@
 {% block title %}{{ event.title }} - Convene{% endblock %}
 
 {% block content %}
-<h1>{{ event.title }}</h1>
-<p>{{ event.description }}</p>
-<p><strong>Location:</strong> {{ event.location }}</p>
-<p><strong>Capacity:</strong> {{ event.capacity }}</p>
+<a href="{% url 'event_list' %}">&larr; Back to all events</a>
 
-<h3>Sessions</h3>
+<div class="event-card event-detail">
+    <h1>{{ event.title }}</h1>
+    <p>{{ event.description }}</p>
+
+    <ul class="event-facts">
+        <li><strong>When:</strong> {{ event.start_date|date:"D, j M Y, g:i A" }} &ndash; {{ event.end_date|date:"D, j M Y, g:i A" }}</li>
+        <li><strong>Location:</strong> {{ event.location }}</li>
+        <li><strong>Spots left:</strong> {{ event.spots_left }} of {{ event.capacity }}</li>
+    </ul>
+
+    {% if event.spots_left <= 0 %}
+        <p><strong>This event is full.</strong></p>
+    {% elif user.is_authenticated %}
+        <form method="POST" action="{% url 'register_for_event' event.pk %}">
+            {% csrf_token %}
+            <button type="submit">Register for this Event</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to register.</p>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <p><a href="{% url 'event_checkin' event.pk %}">Staff Check-In &rarr;</a></p>
+    {% endif %}
+</div>
+
+<h2>Sessions</h2>
 {% for session in event.sessions.all %}
-    <p>{{ session.title }} &mdash; {{ session.start_time }}</p>
+    <div class="event-card">
+        <p class="event-date">{{ session.start_time|date:"D, j M · g:i A" }} &ndash; {{ session.end_time|date:"g:i A" }}</p>
+        <h3>{{ session.title }}</h3>
+        {% if session.description %}<p>{{ session.description }}</p>{% endif %}
+        {% for speaker in session.speakers.all %}
+            <p class="event-meta"><strong>{{ speaker.name }}</strong>{% if speaker.bio %} &mdash; {{ speaker.bio }}{% endif %}</p>
+        {% endfor %}
+    </div>
 {% empty %}
     <p>No sessions scheduled yet.</p>
 {% endfor %}
-
-<a href="{% url 'event_list' %}">&larr; Back to all events</a>
-
-{% if user.is_authenticated %}
-    <form method="POST" action="{% url 'register_for_event' event.pk %}">
-        {% csrf_token %}
-        <button type="submit">Register for this Event</button>
-    </form>
-{% else %}
-    <p><a href="{% url 'login' %}">Log in</a> to register.</p>
-{% endif %}
-{% if user.is_staff %}
-    <a href="{% url 'event_checkin' event.pk %}">Staff Check-In</a>
-{% endif %}
-
 {% endblock %}

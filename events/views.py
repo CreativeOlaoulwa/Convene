@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils import timezone
 
 def event_list(request):
-    events = Event.objects.all()
+    events = Event.objects.order_by('start_date')
     return render(request, 'events/event_list.html', {'events': events})
 
 def event_detail(request, pk):

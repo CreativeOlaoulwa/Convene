@@ -7,12 +7,19 @@ class Event(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     capacity = models.IntegerField()
     banner_image = models.ImageField(upload_to='events/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+    @property
+    def spots_left(self):
+        return self.capacity - self.registrations.count()
+
 
 class Session (models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sessions')
@@ -23,6 +30,7 @@ class Session (models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.event.title})"
+
 
 class Registration (models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')

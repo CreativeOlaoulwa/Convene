@@ -5,13 +5,17 @@
 {% block content %}
 <h1>Upcoming Events</h1>
 
+<div class="event-grid">
 {% for event in events %}
-    <div>
+    <div class="event-card">
+        <p class="event-date">{{ event.start_date|date:"D, j M Y · g:i A" }}</p>
         <h3>{{ event.title }}</h3>
-        <p>{{ event.location }} &middot; Capacity: {{ event.capacity }}</p>
-        <a href="{% url 'event_detail' event.pk %}">View Details</a>
+        <p class="event-meta">{{ event.location }}</p>
+        <p class="event-meta">{{ event.spots_left }} of {{ event.capacity }} spots left</p>
+        <a href="{% url 'event_detail' event.pk %}" class="btn">View Details</a>
     </div>
 {% empty %}
     <p>No events yet.</p>
 {% endfor %}
+</div>
 {% endblock %}
