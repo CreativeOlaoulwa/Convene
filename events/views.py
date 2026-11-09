@@ -20,11 +20,14 @@ def register_for_event(request, pk):
 
     if already_registered:
         messages.info(request, "You're already registered for this event.")
+    elif event.registrations.count() >= event.capacity:
+        messages.error(request, "Sorry, this event is full.")
     else:
         Registration.objects.create(event=event, attendee=request.user)
         messages.success(request, f"You're registered for {event.title}!")
 
     return redirect('event_detail', pk=event.pk)
+
 
 
 @login_required
