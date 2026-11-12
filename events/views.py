@@ -5,6 +5,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.utils import timezone
 
+def home(request):
+    upcoming = Event.objects.filter(end_date__gte=timezone.now()).order_by('start_date')[:3]
+    context = {
+        'upcoming': upcoming,
+        'event_count': Event.objects.count(),
+        'registration_count': Registration.objects.count(),
+    }
+    return render(request, 'events/home.html', context)
+
+
 def event_list(request):
     events = Event.objects.order_by('start_date')
     return render(request, 'events/event_list.html', {'events': events})

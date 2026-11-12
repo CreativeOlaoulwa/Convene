@@ -101,3 +101,48 @@ h2 { color: #10234B; margin: 2rem 0 1rem; }
 
 a.btn { display: inline-block; text-decoration: none; margin-top: 0.75rem; }
 a.btn:hover { background: #0A1733; }
+
+.hero {
+    background: #10234B;
+    color: #ffffff;
+    border-radius: 14px;
+    padding: 3.5rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.hero h1 { color: #ffffff; font-size: 2.4rem; margin-bottom: 1rem; }
+.hero p { max-width: 600px; margin: 0 auto 1.75rem; color: #D6DCE8; }
+
+.hero .btn { background: #C9A227; color: #10234B; }
+.hero .btn:hover { background: #B08C1E; }
+
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn-outline { background: transparent !important; color: #ffffff !important; border: 2px solid #ffffff; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stats div {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(16, 35, 75, 0.08);
+}
+
+.stats strong { display: block; font-size: 1.6rem; color: #10234B; }
+.stats span { color: #5B6472; font-size: 0.9rem; }
+
+.cta { text-align: center; margin-top: 2.5rem; }
+
+@media (max-width: 600px) {
+    .hero h1 { font-size: 1.7rem; }
+    nav { flex-wrap: wrap; padding: 1rem; gap: 1rem; }
+}
+
