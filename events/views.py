@@ -14,6 +14,27 @@ def home(request):
     }
     return render(request, 'events/home.html', context)
 
+@login_required
+def dashboard(request):
+    now = timezone.now()
+    my_regs = Registration.objects.filter(attendee=request.user).select_related('event')
+    upcoming_regs = my_regs.filter(event__end_date__gte=now).order_by('event__start_date')
+    registered_ids = my_regs.values_list('event_id', flat=True)
+
+    context = {
+        'next_reg': upcoming_regs.first(),
+        'upcoming_regs': upcoming_regs,
+        'recommended': Event.objects.filter(end_date__gte=now).exclude(pk__in=registered_ids).order_by('start_date')[:3],
+        'total_count': my_regs.count(),
+        'upcoming_count': upcoming_regs.count(),
+        'checked_in_count': my_regs.filter(checked_in=True).count(),
+        'past_count': my_regs.filter(event__end_date__lt=now).count(),
+    }
+    if request.user.is_staff:
+        context['staff_events'] = Event.objects.filter(end_date__gte=now).order_by('start_date')
+    return render(request, 'events/dashboard.html', context)
+
+
 
 def event_list(request):
     events = Event.objects.order_by('start_date')

@@ -1,14 +1,29 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
+
+
 
 # Create your models here.
 
 class Event(models.Model):
+    CATEGORY_CHOICES = [
+        ('tech', 'Technology'),
+        ('business', 'Business'),
+        ('creative', 'Creative & Design'),
+        ('community', 'Community'),
+        ('education', 'Education'),
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     location = models.CharField(max_length=200)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='tech')
+    organiser = models.CharField(max_length=150, blank=True)
+    venue_address = models.CharField(max_length=255, blank=True)
+    image_url = models.URLField(blank=True, help_text='Link to a cover photo, e.g. from Unsplash.')
     capacity = models.IntegerField()
     banner_image = models.ImageField(upload_to='events/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -19,6 +34,17 @@ class Event(models.Model):
     @property
     def spots_left(self):
         return self.capacity - self.registrations.count()
+
+    @property
+    def is_past(self):
+        return self.end_date < timezone.now()
+
+    @property
+    def percent_full(self):
+        if self.capacity == 0:
+            return 100
+        return round((self.capacity - self.spots_left) * 100 / self.capacity)
+
 
 
 class Session (models.Model):

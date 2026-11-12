@@ -3,8 +3,10 @@ from .models import Event, Session, Registration, Speaker
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'start_date', 'location', 'capacity', 'created_at']
-    search_fields = ['title', 'location']
+    list_display = ['title', 'category', 'start_date', 'location', 'capacity']
+    list_filter = ['category']
+    search_fields = ['title', 'location', 'organiser']
+
 
 @admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):

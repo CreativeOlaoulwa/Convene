@@ -366,3 +366,84 @@ button:hover, .btn:hover { background: var(--navy-dark); }
     .hero h1 { font-size: 2rem; }
     .auth-card, .auth-side { padding: 2rem 1.5rem; }
 }
+
+/* ---------- Dashboard ---------- */
+.welcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    background: linear-gradient(135deg, var(--navy), #1D3A73);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 2.25rem 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.welcome h1 { color: var(--white); margin-bottom: 0.4rem; }
+.welcome p { color: #D6DCE8; }
+.welcome .eyebrow { color: var(--gold); }
+
+.stats-4 { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #E8EDF7;
+    color: var(--navy);
+}
+
+.badge-gold { background: var(--gold); color: var(--navy); }
+.badge-green { background: #E7F6EC; color: #1E6B3A; }
+
+.spotlight {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.75rem;
+    align-items: center;
+}
+
+.spotlight img, .image-placeholder {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.image-placeholder {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--navy), var(--gold));
+    color: var(--white);
+    font-size: 4rem;
+    font-weight: 800;
+}
+
+.spotlight h3 { font-size: 1.5rem; margin: 0.5rem 0; }
+.countdown { color: var(--gold-dark); font-weight: 700; margin: 0.5rem 0 0.25rem; }
+
+.empty-state { text-align: center; padding: 3rem 2rem; margin-top: 2rem; }
+.empty-state .btn { margin-top: 1rem; }
+
+.list-card { padding: 0.5rem 1.5rem; }
+
+.list-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #EEF1F5;
+}
+
+.list-row:last-child { border-bottom: none; }
+.list-row .event-meta { margin: 0.2rem 0 0; }
+
+@media (max-width: 700px) {
+    .spotlight { grid-template-columns: 1fr; }
+    .welcome { flex-direction: column; }
+}
+

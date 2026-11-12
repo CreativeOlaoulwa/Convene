@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Convene{% endblock %}
+
+{% block content %}
+<section class="welcome">
+    <div>
+        <p class="eyebrow">{% now "l, j F Y" %}</p>
+        <h1>Welcome back, {{ user.first_name|default:user.username }} 👋</h1>
+        <p>Here's what's happening with your events.</p>
+    </div>
+    {% if user.is_staff %}<span class="badge badge-gold">Staff</span>{% endif %}
+</section>
+
+<section class="stats stats-4">
+    <div class="card"><strong>{{ upcoming_count }}</strong><span>Upcoming events</span></div>
+    <div class="card"><strong>{{ total_count }}</strong><span>Total registrations</span></div>
+    <div class="card"><strong>{{ checked_in_count }}</strong><span>Events attended</span></div>
+    <div class="card"><strong>{{ past_count }}</strong><span>Past events</span></div>
+</section>
+
+{% if next_reg %}
+<h2>Your next event</h2>
+<div class="spotlight card">
+    {% if next_reg.event.image_url %}
+        <img src="{{ next_reg.event.image_url }}" alt="{{ next_reg.event.title }}">
+    {% else %}
+        <div class="image-placeholder">{{ next_reg.event.title|slice:":1" }}</div>
+    {% endif %}
+    <div>
+        <span class="badge">{{ next_reg.event.get_category_display }}</span>
+        <h3>{{ next_reg.event.title }}</h3>
+        <p class="event-meta">🗓️ {{ next_reg.event.start_date|date:"D, j M Y · g:i A" }}</p>
+        <p class="event-meta">📍 {{ next_reg.event.location }}</p>
+        <p class="countdown">⏳ Starts in {{ next_reg.event.start_date|timeuntil }}</p>
+        <a href="{% url 'event_detail' next_reg.event.pk %}" class="btn">View Event</a>
+    </div>
+</div>
+{% else %}
+<div class="empty-state card">
+    <h3>You haven't registered for anything yet</h3>
+    <p>Find a conference you'll love and reserve your seat in one click.</p>
+    <a href="{% url 'event_list' %}" class="btn btn-gold">Browse Events</a>
+</div>
+{% endif %}
+
+{% if upcoming_regs %}
+<h2>Your upcoming events</h2>
+<div class="list-card card">
+    {% for reg in upcoming_regs %}
+        <div class="list-row">
+            <div>
+                <strong>{{ reg.event.title }}</strong>
+                <p class="event-meta">{{ reg.event.start_date|date:"j M Y · g:i A" }} &middot; {{ reg.event.location }}</p>
+            </div>
+            {% if reg.checked_in %}
+                <span class="badge badge-green">Checked in</span>
+            {% else %}
+                <span class="badge">Registered</span>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h2>Recommended for you</h2>
+<div class="event-grid">
+{% for event in recommended %}
+    <div class="event-card">
+        <p class="event-date">{{ event.start_date|date:"D, j M Y · g:i A" }}</p>
+        <h3>{{ event.title }}</h3>
+        <p class="event-meta">📍 {{ event.location }}</p>
+        <p class="event-meta">{{ event.spots_left }} of {{ event.capacity }} spots left</p>
+        <a href="{% url 'event_detail' event.pk %}" class="btn">View Details</a>
+    </div>
+{% empty %}
+    <p class="event-meta">You're registered for every upcoming event. Nice!</p>
+{% endfor %}
+</div>
+
+{% if user.is_staff %}
+<h2>Staff tools</h2>
+<div class="list-card card">
+    {% for event in staff_events %}
+        <div class="list-row">
+            <div>
+                <strong>{{ event.title }}</strong>
+                <p class="event-meta">{{ event.registrations.count }} registered &middot; {{ event.spots_left }} spots left</p>
+            </div>
+            <a href="{% url 'event_checkin' event.pk %}" class="btn btn-small">Open Check-In</a>
+        </div>
+    {% empty %}
+        <p class="event-meta">No upcoming events to manage.</p>
+    {% endfor %}
+    <div class="list-row">
+        <strong>Manage events, sessions and speakers</strong>
+        <a href="/admin/" class="btn btn-small btn-gold">Admin Panel</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

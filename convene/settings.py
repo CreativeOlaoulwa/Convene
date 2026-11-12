@@ -158,7 +158,7 @@ MAILERS = {
     },
 }
 
-LOGIN_REDIRECT_URL = 'event_list'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 
 REST_FRAMEWORK = {
