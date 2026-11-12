@@ -4,40 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convene: conference registration, capacity management and on-site check-in.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <title>{% block title %}Convene{% endblock %}</title>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'home' %}">Convene</a>
-        <a href="{% url 'event_list' %}">Events</a>
-
-        {% if user.is_authenticated %}
-        <a href="{% url 'my_registrations' %}">My Registrations</a>
+    <nav class="site-nav">
+        <a href="{% url 'home' %}" class="brand">Convene</a>
+        <div class="nav-links">
+            <a href="{% url 'event_list' %}">Events</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'my_registrations' %}">My Registrations</a>
                 <form method="POST" action="{% url 'logout' %}" class="nav-logout">
-            {% csrf_token %}
-            <button type="submit">Log Out ({{ user.username }})</button>
-        </form>
-
-    {% else %}
-        <a href="{% url 'login' %}">Log In</a>
-        <a href="{% url 'register' %}">Register</a>
-    {% endif %}
+                    {% csrf_token %}
+                    <button type="submit">Log Out ({{ user.username }})</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Log In</a>
+                <a href="{% url 'register' %}" class="btn btn-gold btn-small">Get Started</a>
+            {% endif %}
+        </div>
     </nav>
 
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% block hero %}{% endblock %}
+
     <main>
-        {% if messages %}
-            {% for message in messages %}
-                <div>{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
-        <p>Convene &copy; 2026</p>
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <a href="{% url 'home' %}" class="brand">Convene</a>
+                <p>Conference registration, capacity management and on-site check-in in one place.</p>
+            </div>
+            <div>
+                <h4>Explore</h4>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'event_list' %}">All Events</a>
+            </div>
+            <div>
+                <h4>Account</h4>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_registrations' %}">My Registrations</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Log In</a>
+                    <a href="{% url 'register' %}">Create Account</a>
+                {% endif %}
+            </div>
+            <div>
+                <h4>Developers</h4>
+                <a href="{% url 'api_event_list' %}">REST API</a>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 Convene &middot; Built with Django &amp; Django REST Framework</p>
     </footer>
 </body>
 </html>
