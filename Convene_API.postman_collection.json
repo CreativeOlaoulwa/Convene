@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "Convene API",
+    "description": "REST API for Convene, a conference registration and check-in system. Live at https://convene-ieso.onrender.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://convene-ieso.onrender.com" },
+    { "key": "token", "value": "" },
+    { "key": "registration_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Get auth token",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"username\": \"your-username\",\n  \"password\": \"your-password\"\n}" },
+        "url": "{{base_url}}/api/token/",
+        "description": "Returns {\"token\": \"...\"}. 200 on success, 400 on wrong credentials."
+      }
+    },
+    {
+      "name": "List events",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/events/",
+        "description": "Public. 200 with a list of events, including sessions and spots_left."
+      }
+    },
+    {
+      "name": "Event detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/events/1/",
+        "description": "Public. 200 for an existing event, 404 if it does not exist."
+      }
+    },
+    {
+      "name": "Register for event (no auth)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"event\": 1\n}" },
+        "url": "{{base_url}}/api/registrations/",
+        "description": "Expected 401: write endpoints require authentication."
+      }
+    },
+    {
+      "name": "Register for event",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Token {{token}}" }
+        ],
+        "body": { "mode": "raw", "raw": "{\n  \"event\": 1\n}" },
+        "url": "{{base_url}}/api/registrations/",
+        "description": "201 on success. 400 if already registered or the event is full."
+      }
+    },
+    {
+      "name": "Cancel registration",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Token {{token}}" }],
+        "url": "{{base_url}}/api/registrations/{{registration_id}}/",
+        "description": "204 on success. 404 if the registration does not belong to the logged-in user."
+      }
+    }
+  ]
+}
